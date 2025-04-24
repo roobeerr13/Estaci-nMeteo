@@ -1,7 +1,19 @@
 import hashlib
 import hmac
+import os
 
-CLAVE_SECRETA = b"clave_secreta_segura"
+# Verificar si el archivo de clave secreta existe, si no, generar una nueva clave
+def cargar_o_generar_clave():
+    if not os.path.exists("clave_secreta.key"):
+        clave_secreta = os.urandom(32)  # Genera una clave aleatoria de 32 bytes
+        with open("clave_secreta.key", "wb") as key_file:
+            key_file.write(clave_secreta)
+    else:
+        with open("clave_secreta.key", "rb") as key_file:
+            clave_secreta = key_file.read()
+    return clave_secreta
+
+CLAVE_SECRETA = cargar_o_generar_clave()
 
 class EstacionMeteorologica:
     def __init__(self, nombre):
@@ -9,7 +21,7 @@ class EstacionMeteorologica:
         self.datos_hashed = []
 
     def registrar_datos(self, datos):
-        """Genera un hash usando HMAC con la clave secreta y lo almacena."""
+        """Genera un hash con HMAC usando la clave secreta y lo almacena."""
         hashed_data = hmac.new(CLAVE_SECRETA, datos.encode(), hashlib.sha256).hexdigest()
         self.datos_hashed.append(hashed_data)
 
@@ -17,28 +29,3 @@ class EstacionMeteorologica:
         """Verifica si un dato ha sido registrado comparando el hash."""
         nuevo_hash = hmac.new(CLAVE_SECRETA, datos.encode(), hashlib.sha256).hexdigest()
         return nuevo_hash in self.datos_hashed
-
-class SistemaMeteorologico:
-    def __init__(self):
-        self.estaciones = {}
-
-        # Estaciones meteorológicas predefinidas
-        estaciones_predefinidas = ["Lluvia", "Sol", "Nublado", "Nevado", "Tormenta", "Neblina", "Viento fuerte"]
-        for nombre in estaciones_predefinidas:
-            self.agregar_estacion(nombre)
-
-    def agregar_estacion(self, nombre):
-        """Registra una nueva estación meteorológica."""
-        if nombre not in self.estaciones:
-            self.estaciones[nombre] = EstacionMeteorologica(nombre)
-
-    def registrar_datos_estacion(self, nombre, datos):
-        """Registra un dato meteorológico en la estación."""
-        if nombre in self.estaciones:
-            self.estaciones[nombre].registrar_datos(datos)
-
-    def verificar_datos_estacion(self, nombre, datos):
-        """Verifica si un dato existe en la estación."""
-        if nombre in self.estaciones:
-            return self.estaciones[nombre].verificar_datos(datos)
-        return False
