@@ -1,0 +1,31 @@
+#boton-agregar {
+    background-color: #4CAF50;
+    color: white;
+    font-size: 16px;
+    padding: 10px;
+    border-radius: 5px;
+}
+
+#boton-registrar {
+    background-color: #2196F3;
+    color: white;
+    font-size: 16px;
+    padding: 10px;
+    border-radius: 5px;
+}
+
+#boton-consultar {
+    background-color: #FFC107;
+    color: black;
+    font-size: 16px;
+    padding: 10px;
+    border-radius: 5px;
+}
+
+#boton-guardar {
+    background-color: #FF5722;
+    color: white;
+    font-size: 16px;
+    padding: 10px;
+    border-radius: 5px;
+}
