@@ -1,6 +1,7 @@
 import hashlib
 import hmac
 import os
+import csv
 
 # Función para cargar o generar la clave secreta
 def cargar_o_generar_clave():
@@ -25,10 +26,19 @@ class EstacionMeteorologica:
         hashed_data = hmac.new(CLAVE_SECRETA, datos.encode(), hashlib.sha256).hexdigest()
         self.datos_hashed.append(hashed_data)
 
+        # Guardar automáticamente en CSV
+        self.guardar_en_csv(datos)
+
     def verificar_datos(self, datos):
         """Verifica si un dato ha sido registrado comparando el hash."""
         nuevo_hash = hmac.new(CLAVE_SECRETA, datos.encode(), hashlib.sha256).hexdigest()
         return nuevo_hash in self.datos_hashed
+
+    def guardar_en_csv(self, datos):
+        """Guarda los datos en un archivo CSV."""
+        with open("datos_meteorologicos.csv", "a", newline="", encoding="utf-8") as file:
+            writer = csv.writer(file)
+            writer.writerow([self.nombre, datos])
 
 class SistemaMeteorologico:
     def __init__(self):
@@ -45,7 +55,7 @@ class SistemaMeteorologico:
             self.estaciones[nombre] = EstacionMeteorologica(nombre)
 
     def registrar_datos_estacion(self, nombre, datos):
-        """Registra un dato meteorológico en la estación."""
+        """Registra un dato meteorológico en la estación y lo guarda en CSV."""
         if nombre in self.estaciones:
             self.estaciones[nombre].registrar_datos(datos)
 
