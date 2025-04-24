@@ -1,6 +1,5 @@
 from cryptography.fernet import Fernet
 
-
 def cargar_o_generar_clave():
     try:
         with open("key.key", "rb") as key_file:
@@ -31,6 +30,10 @@ class EstacionMeteorologica:
 class SistemaMeteorologico:
     def __init__(self):
         self.estaciones = {}
+
+        estaciones_predefinidas = ["Lluvia", "Sol", "Nublado", "Nevado", "Tormenta", "Neblina", "Viento fuerte"]
+        for nombre in estaciones_predefinidas:
+            self.agregar_estacion(nombre)
 
     def agregar_estacion(self, nombre):
         if nombre not in self.estaciones:

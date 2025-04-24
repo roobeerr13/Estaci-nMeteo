@@ -1,8 +1,20 @@
 import gradio as gr
+import csv
 
 class VistaGradio:
     def __init__(self, controlador):
         self.controlador = controlador
+
+    def guardar_en_csv(self, nombre):
+        datos = self.controlador.obtener_datos(nombre)
+        if not datos:
+            return f"No hay datos para la estación '{nombre}'."
+
+        with open("datos_meteorologicos.csv", "a", newline="", encoding="utf-8") as file:
+            writer = csv.writer(file)
+            writer.writerow([nombre] + datos)
+
+        return f"Datos de '{nombre}' guardados en archivo CSV."
 
     def mostrar_interfaz(self):
         def agregar_estacion(nombre):
@@ -17,28 +29,26 @@ class VistaGradio:
             datos = self.controlador.obtener_datos(nombre)
             return "\n".join(datos) if datos else "No hay datos para esta estación."
 
-        interfaz_agregar = gr.Interface(
-            fn=agregar_estacion,
-            inputs="text",
-            outputs="text",
-            title="Agregar Nueva Estación Meteorológica"
-        )
+        with gr.Blocks() as interfaz:
+            gr.Markdown("## 🌤️ Sistema de Gestión Meteorológica")
 
-        interfaz_registro = gr.Interface(
-            fn=registrar_datos,
-            inputs=["text", "text"],
-            outputs="text",
-            title="Registrar Datos Meteorológicos"
-        )
+            with gr.Row():
+                nombre_estacion = gr.Textbox(label="Nombre de la Estación")
+                datos_registro = gr.Textbox(label="Registro de Datos")
+                boton_registrar = gr.Button("Registrar Datos")
 
-        interfaz_visualizacion = gr.Interface(
-            fn=obtener_datos,
-            inputs="text",
-            outputs="text",
-            title="Ver Datos de una Estación"
-        )
+            boton_registrar.click(fn=registrar_datos, inputs=[nombre_estacion, datos_registro], outputs="text")
 
-        gr.TabbedInterface(
-            [interfaz_agregar, interfaz_registro, interfaz_visualizacion],
-            ["Agregar Estación", "Registrar Datos", "Ver Datos"]
-        ).launch()
+            with gr.Row():
+                consulta_estacion = gr.Textbox(label="Consultar Estación")
+                boton_consultar = gr.Button("Ver Datos")
+
+            boton_consultar.click(fn=obtener_datos, inputs=[consulta_estacion], outputs="text")
+
+            with gr.Row():
+                nombre_guardar = gr.Textbox(label="Guardar Datos de la Estación")
+                boton_guardar = gr.Button("Guardar en archivo.csv")
+
+            boton_guardar.click(fn=self.guardar_en_csv, inputs=[nombre_guardar], outputs="text")
+
+        interfaz.launch()
