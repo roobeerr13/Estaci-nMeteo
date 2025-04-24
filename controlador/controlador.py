@@ -8,5 +8,5 @@ class Controlador:
     def registrar_datos(self, nombre, datos):
         self.sistema_meteorologico.registrar_datos_estacion(nombre, datos)
 
-    def obtener_datos(self, nombre):
-        return self.sistema_meteorologico.obtener_datos_estacion(nombre)
+    def verificar_datos(self, nombre, datos):
+        return self.sistema_meteorologico.verificar_datos_estacion(nombre, datos)

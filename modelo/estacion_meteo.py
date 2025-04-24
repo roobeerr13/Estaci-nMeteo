@@ -2,7 +2,6 @@ import hashlib
 import hmac
 import os
 
-# Verificar si el archivo de clave secreta existe, si no, generar una nueva clave
 def cargar_o_generar_clave():
     if not os.path.exists("clave_secreta.key"):
         clave_secreta = os.urandom(32)  # Genera una clave aleatoria de 32 bytes
@@ -29,3 +28,27 @@ class EstacionMeteorologica:
         """Verifica si un dato ha sido registrado comparando el hash."""
         nuevo_hash = hmac.new(CLAVE_SECRETA, datos.encode(), hashlib.sha256).hexdigest()
         return nuevo_hash in self.datos_hashed
+
+class SistemaMeteorologico:
+    def __init__(self):
+        self.estaciones = {}
+
+        estaciones_predefinidas = ["Lluvia", "Sol", "Nublado", "Nevado", "Tormenta", "Neblina", "Viento fuerte"]
+        for nombre in estaciones_predefinidas:
+            self.agregar_estacion(nombre)
+
+    def agregar_estacion(self, nombre):
+        """Registra una nueva estación meteorológica."""
+        if nombre not in self.estaciones:
+            self.estaciones[nombre] = EstacionMeteorologica(nombre)
+
+    def registrar_datos_estacion(self, nombre, datos):
+        """Registra un dato meteorológico en la estación."""
+        if nombre in self.estaciones:
+            self.estaciones[nombre].registrar_datos(datos)
+
+    def verificar_datos_estacion(self, nombre, datos):
+        """Verifica si un dato existe en la estación."""
+        if nombre in self.estaciones:
+            return self.estaciones[nombre].verificar_datos(datos)
+        return False
