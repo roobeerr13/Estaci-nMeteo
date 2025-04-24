@@ -8,3 +8,4 @@ venv/
 
 # Evitar subir archivos de datos privados
 datos_meteorologicos.csv
+clave_secreta.key  # Clave secreta de encriptación HMAC
