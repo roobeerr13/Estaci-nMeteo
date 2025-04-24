@@ -1,11 +1,11 @@
-from modelo.estacion_meteo import EstacionMeteorologica
+from modelo.estacion_meteo import SistemaMeteorologico
 from controlador.controlador import Controlador
 from vista.vista_gradio import VistaGradio
 
 # Inicialización
-estacion = EstacionMeteorologica("Estación Central")
-controlador = Controlador(estacion)
+sistema_meteorologico = SistemaMeteorologico()
+controlador = Controlador(sistema_meteorologico)
 vista = VistaGradio(controlador)
 
-# Ejecutar la interfaz
+# Lanzar la interfaz
 vista.mostrar_interfaz()
