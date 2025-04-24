@@ -2,6 +2,7 @@ import hashlib
 import hmac
 import os
 
+# Función para cargar o generar la clave secreta
 def cargar_o_generar_clave():
     if not os.path.exists("clave_secreta.key"):
         clave_secreta = os.urandom(32)  # Genera una clave aleatoria de 32 bytes
@@ -33,6 +34,7 @@ class SistemaMeteorologico:
     def __init__(self):
         self.estaciones = {}
 
+        # Estaciones meteorológicas predefinidas
         estaciones_predefinidas = ["Lluvia", "Sol", "Nublado", "Nevado", "Tormenta", "Neblina", "Viento fuerte"]
         for nombre in estaciones_predefinidas:
             self.agregar_estacion(nombre)
