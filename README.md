@@ -1,4 +1,4 @@
-# Estaci-nMeteo
+# EstacionMeteo
 (https://github.com/roobeerr13/EstacionMeteo.git)
 # 🌤️ Sistema de Gestión Meteorológica con Encriptación HMAC
 
